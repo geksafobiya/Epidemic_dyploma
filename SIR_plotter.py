@@ -12,8 +12,8 @@ import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 
 # Local application modules
-from growth_calculator import GrowthCalculator
-from options_menu import OptionsMenu_SIR
+from SIR_calculator import SIRCalculator
+from OptionsMenu_SIR import OptionsMenu_SIR
 #from options_menu_4_species import OptionsMenu_4_species
 #from options_menu_2 import OptionsMenu_2_species
 
@@ -94,7 +94,7 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         sir_menu.addAction(sir_action)
 
     def calculate_coeffs(self):
-        growth = GrowthCalculator()
+        growth = SIRCalculator()
         growth.gamma = self.options_menu.gamma_sb.value()
         growth.beta = self.options_menu.beta_sb.value()
       #  R0 = growth.calculate_r0(growth.beta, growth.gamma)
@@ -102,7 +102,7 @@ class AppForm_SIR(QtWidgets.QMainWindow):
 
     def calculate_data(self):
         # объект GrowthCalculator
-        growth = GrowthCalculator()
+        growth = SIRCalculator()
 
         # Update the GrowthCalculator parameters from the GUI options
         growth.gamma = self.options_menu.gamma_sb.value()

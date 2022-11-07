@@ -25,6 +25,10 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
             widget.setRange(0, 10)
             widget.setSingleStep(0.01)
 
+        for widget in (self.t_recovery, self.R0):
+            widget.setRange(0, 100)
+            widget.setSingleStep(0.01)
+
         coeff_grid = QtWidgets.QGridLayout()
         coeff_grid.addWidget(QtWidgets.QLabel('Константа швидкості β'), 0, 0)
         coeff_grid.addWidget(self.beta_sb, 0, 1)

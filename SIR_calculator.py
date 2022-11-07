@@ -1,7 +1,7 @@
 import numpy as np
 np.seterr(all='raise')
 
-class GrowthCalculator(object):
+class SIRCalculator(object):
     def __init__(self):
         # SIR equation coefficients
       #  self.Susceptible = 20.0 #сприятливі до інфекції
