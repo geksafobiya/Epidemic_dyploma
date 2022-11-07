@@ -19,10 +19,10 @@ from options_menu import OptionsMenu_SIR
 
 #import resources
 
-APP_NAME = 'Lotka-Volterra'
+APP_NAME = 'Epidemics'
 AUTHOR = 'Клименко Анастасiя'
 
-class AppForm_3_species(QtWidgets.QMainWindow):
+class AppForm_SIR(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
 
@@ -46,6 +46,9 @@ class AppForm_3_species(QtWidgets.QMainWindow):
         # Подключение сигналов из меню параметров
         self.options_menu.update_btn.clicked.connect(self.clear_graph)
         self.options_menu.update_btn.clicked.connect(self.calculate_data)
+        self.options_menu.update_btn.clicked.connect(self.calculate_coeffs)
+
+         #elf.options_menu.t_recovery = self.trec
 
         self.options_menu.clear_graph_btn.clicked.connect(self.clear_graph)
         self.options_menu.legend_cb.stateChanged.connect(self.redraw_graph)
@@ -71,6 +74,10 @@ class AppForm_3_species(QtWidgets.QMainWindow):
         about_action.setIcon(QtGui.QIcon(':/resources/icon_info.png'))
         about_action.triggered.connect(self.show_about)
 
+        sir_action = QtWidgets.QAction('&SIR', self)
+        sir_action.setToolTip('SIR')
+        sir_action.triggered.connect(self.show_sir)
+
      # создать менюбар
         file_exit_action = QtWidgets.QAction('&Exit', self)
         file_exit_action.setToolTip('Exit')
@@ -83,12 +90,21 @@ class AppForm_3_species(QtWidgets.QMainWindow):
         help_menu = self.menuBar().addMenu('&Help')
         help_menu.addAction(about_action)
 
+        sir_menu = self.menuBar().addMenu('&SIR')
+        sir_menu.addAction(sir_action)
+
+    def calculate_coeffs(self):
+        growth = GrowthCalculator()
+        growth.gamma = self.options_menu.gamma_sb.value()
+        growth.beta = self.options_menu.beta_sb.value()
+      #  R0 = growth.calculate_r0(growth.beta, growth.gamma)
+      #  trec = growth.calculate_trecovery(growth.gamma)
+
     def calculate_data(self):
         # объект GrowthCalculator
         growth = GrowthCalculator()
 
         # Update the GrowthCalculator parameters from the GUI options
-     #   growth.a11 = self.options_menu.a11_sb.value()
         growth.gamma = self.options_menu.gamma_sb.value()
         growth.beta = self.options_menu.beta_sb.value()
 
@@ -133,18 +149,18 @@ class AppForm_3_species(QtWidgets.QMainWindow):
         self.axes.clear()
 
         # Create the graph labels
-        self.axes.set_title('Цикл роста хищников и травоядных вида 1 и вида 2')
-        self.axes.set_xlabel('Итерации')
-        self.axes.set_ylabel('Размер популяции')
+        self.axes.set_title('SIR-model: Susceptible, Infectious, Recovered')
+        self.axes.set_xlabel('Ітерації')
+        self.axes.set_ylabel('Кількість населення')
 
         # Plot the current population data
-        if self.recovered_history:
-            self.axes.plot(self.recovered_history, 'r-', label='очухалися')
+
         if self.susceptible_history:
             self.axes.plot(self.susceptible_history, 'b-', label='скоро здохнуть')
         if self.infectious_history:
-            self.axes.plot(self.infectious_history, 'g-', label='хворі на голову')
-
+            self.axes.plot(self.infectious_history, 'r-', label='хворі на голову')
+        if self.recovered_history:
+            self.axes.plot(self.recovered_history, 'g-', label='очухалися')
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
             if self.recovered_history or self.susceptible_history or self.infectious_history:
@@ -160,11 +176,26 @@ class AppForm_3_species(QtWidgets.QMainWindow):
         # рисуем график
         self.canvas.draw()
 
+    def show_sir(self):
+
+        message = '''<font size="+2">SIR-модель</font>
+            <p>dS/dt = -βSI/N 
+            <p>dI/dt = βSI/n - ɣI 
+            <p>dR/dt = ɣI
+            <p>де
+            <p>S — кількість сприятливих до вірусу;
+            <p>I — кількість інфікованих;
+            <p>R — кількість переболівших;
+            <p>β — константа швидкості;
+            <p>ɣ — швидкість одужання.
+            '''
+        QtWidgets.QMessageBox.about(self, 'SIR' + '', message)
+
     def show_about(self):
 
         message = '''<font size="+2">%s</font>
             <p>Дипломна робота на тему "моделювання епідеміологічних моделей".
-            <p>Написана %s, група КА-13мп.
+            <p>Написана by %s, група КА-13мп.
             ''' %(APP_NAME, AUTHOR)
 
         QtWidgets.QMessageBox.about(self, 'About' + APP_NAME, message)
@@ -172,6 +203,6 @@ class AppForm_3_species(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(':/resources/icon.svg'))
-    form = AppForm_3_species()
+    form = AppForm_SIR()
     form.show()
     app.exec_()

@@ -18,34 +18,23 @@ class GrowthCalculator(object):
         self.rec = 10
 
     def dS(self, Susceptible, Infectious, Recovered):
-
         dS_dt = -(self.beta*Susceptible*Infectious)/(Susceptible+Infectious+Recovered)
         return dS_dt
 
     def dI(self, Susceptible, Infectious, Recovered):
-
         dI_dt = (self.beta*Susceptible*Infectious)/(Susceptible+Infectious+Recovered) - self.gamma*Infectious
         return dI_dt
 
     def dR(self, Susceptible, Infectious, Recovered):
-
-        dR_dt = self.gamma*Recovered
-
+        dR_dt = self.gamma*Infectious
         # Calculate the predator population change
         return dR_dt
 
     def calculate(self):
          # import json
-        """
-        Рассчитывает прирост популяции хищников / жертв / суперхищников для заданных параметров.
-        (Определено в строке документации __init__). Возвращает следующий словарь:
 
-        {'predator': [predator population history as a list],
-         'prey': [prey population history as a list],
-         'superpredator: [superpredator population history as a list]'}
-        """
-        infectious_history = []
         susceptible_history = []
+        infectious_history = []
         recovered_history = []
 
         y0 = np.array([self.sus, self.inf, self.rec], dtype='double')
@@ -66,9 +55,17 @@ class GrowthCalculator(object):
 
         return {
             'Susceptible': susceptible_history,
-            'Recovered': infectious_history,
-            'Infectious': recovered_history
+            'Infectious': infectious_history,
+            'Recovered': recovered_history
         }
+
+    def calculate_r0(self, beta, gamma):
+        R0 = beta / gamma
+        return R0
+
+    def calculate_trecovery(self, gamma):
+        t_recovery = 1 / gamma
+        return t_recovery
 
     def derivatives(self, t, rf):
 

@@ -11,26 +11,25 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         # Create the "SIR Coefficients" options
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.gamma_sb = QtWidgets.QDoubleSpinBox()
-        self.t_recovery = QtWidgets.QDoubleSpinBox()
-        self.R0 = QtWidgets.QDoubleSpinBox()
 
+  #      self.t_recovery = QtWidgets.QLabel()
+   #     self.R0 = QtWidgets.QLabel()
 
-
-        for widget in (self.beta_sb, self.gamma_sb, self.t_recovery, self.R0):
+        for widget in (self.beta_sb, self.gamma_sb):
             widget.setRange(0, 10)
             widget.setSingleStep(0.01)
 
         coeff_grid = QtWidgets.QGridLayout()
-        coeff_grid.addWidget(QtWidgets.QLabel('Константа швидкості'), 0, 0)
+        coeff_grid.addWidget(QtWidgets.QLabel('Константа швидкості β'), 0, 0)
         coeff_grid.addWidget(self.beta_sb, 0, 1)
 
-        coeff_grid.addWidget(QtWidgets.QLabel('Швидкість одужання'), 1, 0)
+        coeff_grid.addWidget(QtWidgets.QLabel('Швидкість одужання γ'), 1, 0)
         coeff_grid.addWidget(self.gamma_sb, 1, 1)
-        coeff_grid.addWidget(QtWidgets.QLabel('середній час одужання після інфекції'), 2, 0)
-        coeff_grid.addWidget(self.t_recovery, 2, 1)
+        coeff_grid.addWidget(QtWidgets.QLabel('Cередній час одужання після інфекції'), 2, 0)
+       #coeff_grid.addWidget(, 2, 1)
 
         coeff_grid.addWidget(QtWidgets.QLabel('Передаваність хвороби'), 3, 0)
-        coeff_grid.addWidget(self.R0, 3, 1)
+   #     coeff_grid.addWidget(self.R0, 3, 1)
 
         coeff_gb = QtWidgets.QGroupBox('Коефіцієнти SIR-моделі:')
         coeff_gb.setLayout(coeff_grid)
@@ -61,7 +60,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         other_grid.addWidget(self.sus_sb, 0, 1)
         other_grid.addWidget(QtWidgets.QLabel('Інфіковані'), 1, 0)
         other_grid.addWidget(self.inf_sb, 1, 1)
-        other_grid.addWidget(QtWidgets.QLabel('очухані:'), 2, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 2, 0)
         other_grid.addWidget(self.rec_sb, 2, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Ітерації'), 3, 0)
@@ -122,10 +121,10 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
 
         self.reset_values_btn = QtWidgets.QPushButton(
             QtGui.QIcon(':/resources/arrow_undo.png'),
-            'Сброс значений')
+            'Зброс значень')
         self.clear_graph_btn = QtWidgets.QPushButton(
             QtGui.QIcon(':/resources/chart_line_delete.png'),
-            'Очистить график')
+            'Очистити графік')
 
         self.reset_values_btn.clicked.connect(self.reset_values)
 
@@ -138,23 +137,21 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         container.addWidget(other_gb)
         container.addWidget(graph_gb)
         container.addWidget(self.update_btn)
-        container.addStretch()
+      #  container.addStretch()
      #   container.addWidget(self.preySuperpredator_btn)
      #   container.addWidget(self.preyPredator_btn)
-     #   container.addStretch()
+     #
         container.addWidget(self.reset_values_btn)
         container.addWidget(self.clear_graph_btn)
+        container.addStretch()
         self.setLayout(container)
 
         # Populate the widgets with values
         self.reset_values()
 
-
     def reset_values(self):
-
         self.beta_sb.setValue(0.1)
         self.gamma_sb.setValue(0.1)
-
         self.sus_sb.setValue(5)
         self.inf_sb.setValue(20)
         self.rec_sb.setValue(5)
