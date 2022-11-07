@@ -12,8 +12,8 @@ import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 
 # Local application modules
-from SEIR_calculator import SEIRCalculator
-from OptionsMenu_SEIR import OptionsMenu_SEIR
+from SEIR_mod_calculator import SEIRModCalculator
+from OptionsMenu_SEIR_mod import OptionsMenu_SEIR_mod
 #from options_menu_4_species import OptionsMenu_4_species
 #from options_menu_2 import OptionsMenu_2_species
 
@@ -22,7 +22,7 @@ from OptionsMenu_SEIR import OptionsMenu_SEIR
 APP_NAME = 'Epidemics'
 AUTHOR = 'Клименко Анастасiя'
 
-class AppForm_SEIR(QtWidgets.QMainWindow):
+class AppForm_SEIR_mod(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
 
@@ -30,7 +30,7 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         self.setWindowTitle(APP_NAME)
 
         # Создание в меню параметров в виджете док-станции
-        self.options_menu = OptionsMenu_SEIR()
+        self.options_menu = OptionsMenu_SEIR_mod()
         dock = QtWidgets.QDockWidget('Налаштування коефіцієнтів', self)
         dock.setFeatures(
             QtWidgets.QDockWidget.NoDockWidgetFeatures |
@@ -74,9 +74,9 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         about_action.setIcon(QtGui.QIcon(':/resources/icon_info.png'))
         about_action.triggered.connect(self.show_about)
 
-        sir_action = QtWidgets.QAction('&SEIR', self)
-        sir_action.setToolTip('SEIR')
-        sir_action.triggered.connect(self.show_seir)
+        sir_action = QtWidgets.QAction('&SEIRmod', self)
+        sir_action.setToolTip('SEIRmod')
+        sir_action.triggered.connect(self.show_seir_mod)
 
      # создать менюбар
         file_exit_action = QtWidgets.QAction('&Exit', self)
@@ -90,18 +90,19 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         help_menu = self.menuBar().addMenu('&Help')
         help_menu.addAction(about_action)
 
-        sir_menu = self.menuBar().addMenu('&SEIR')
+        sir_menu = self.menuBar().addMenu('&SEIRmod')
         sir_menu.addAction(sir_action)
 
 
     def calculate_data(self):
         # объект GrowthCalculator
-        growth = SEIRCalculator()
+        growth = SEIRModCalculator()
 
         # Update the GrowthCalculator parameters from the GUI options
         growth.gamma = self.options_menu.gamma_sb.value()
         growth.beta = self.options_menu.beta_sb.value()
         growth.alpha = self.options_menu.alpha_sb.value()
+        growth.theta = self.options_menu.theta_sb.value()
         growth.sus = self.options_menu.sus_sb.value()
         growth.exp = self.options_menu.exp_sb.value()
         growth.inf = self.options_menu.inf_sb.value()
@@ -120,7 +121,7 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         if (len(self.infectious_history) == 0 and
                 len(self.susceptible_history) == 0 and
                 len(self.recovered_history) == 0 and
-                len(self.exposed_history)==0):
+                len(self.exposed_history) == 0):
             QtWidgets.QMessageBox.information(self, 'Error', 'Помилка')
             return
 
@@ -147,7 +148,7 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         self.axes.clear()
 
         # Create the graph labels
-        self.axes.set_title('SEIR-model: Susceptible, Exposed, Infectious, Recovered')
+        self.axes.set_title('modified SEIR-model: Susceptible, Exposed, Infectious, Recovered')
         self.axes.set_xlabel('Ітерації')
         self.axes.set_ylabel('Кількість населення')
 
@@ -176,7 +177,7 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
         # рисуем график
         self.canvas.draw()
 
-    def show_seir(self):
+    def show_seir_mod(self):
 
         message = '''<font size="+2">SEIR-модель</font>
             <p>dS/dt = -βSI/N 
@@ -188,11 +189,12 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
             <p>Е — кількість населення із хворобою у інкубаційному періоді;
             <p>I — кількість інфікованих;
             <p>R — кількість переболівших;
+            <p>Θ — характеризує ступінь заразності латентних носіїв у порівнянні із захворілими;
             <p>β — константа швидкості;
             <p>α — швидкість переходу хвороби від інкубаційної стадії до відкритої;
             <p>ɣ — швидкість одужання.
             '''
-        QtWidgets.QMessageBox.about(self, 'SЕIR' + '', message)
+        QtWidgets.QMessageBox.about(self, 'SЕIR modified' + '', message)
 
     def show_about(self):
 
@@ -206,6 +208,6 @@ class AppForm_SEIR(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(':/resources/icon.svg'))
-    form = AppForm_SEIR()
+    form = AppForm_SEIR_mod()
     form.show()
     app.exec_()

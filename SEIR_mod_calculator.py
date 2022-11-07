@@ -1,7 +1,7 @@
 import numpy as np
 np.seterr(all='raise')
 
-class SEIRCalculator(object):
+class SEIRModCalculator(object):
     def __init__(self):
         # SIR equation coefficients
       #  self.Susceptible = 20.0 #сприятливі до інфекції
@@ -9,6 +9,7 @@ class SEIRCalculator(object):
         self.gamma = 1.0 #швидкість одужання
         self.beta = 1.0 #константа швидкості
         self.alpha = 1.0
+        self.theta = 1.0
       #  self.Infectious = 10.0
         # Other parameters
         self.dt = 0.02
@@ -19,11 +20,11 @@ class SEIRCalculator(object):
         self.rec = 10
 
     def dS(self, Susceptible, Exposed, Infectious, Recovered):
-        dS_dt = -(self.beta*Susceptible*Infectious)/(Susceptible+Infectious+Recovered+Exposed)
+        dS_dt = -(self.beta*Susceptible*(Infectious+self.theta*Exposed))/(Susceptible+Infectious+Recovered+Exposed)
         return dS_dt
 
     def dE(self, Susceptible, Exposed, Infectious, Recovered):
-        dE_dt = self.beta*Susceptible*Infectious/(Susceptible+Infectious+Recovered+Exposed) - self.alpha*Exposed
+        dE_dt = self.beta*Susceptible*(Infectious+self.theta*Exposed)/(Susceptible+Infectious+Recovered+Exposed) - self.alpha*Exposed
         return dE_dt
 
     def dI(self, Susceptible, Exposed, Infectious, Recovered):
