@@ -12,8 +12,14 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.gamma_sb = QtWidgets.QDoubleSpinBox()
 
-  #      self.t_recovery = QtWidgets.QLabel()
-   #     self.R0 = QtWidgets.QLabel()
+        self.t_recovery = QtWidgets.QDoubleSpinBox()
+        self.R0 = QtWidgets.QDoubleSpinBox()
+
+        self.gamma_sb.valueChanged.connect(self.onGammaChanged)
+        self.t_recovery.valueChanged.connect(self.onTrecChanged)
+
+        self.beta_sb = QtWidgets.QDoubleSpinBox()
+        self.beta_sb.valueChanged.connect(self.onBetaChanged)
 
         for widget in (self.beta_sb, self.gamma_sb):
             widget.setRange(0, 10)
@@ -26,10 +32,10 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         coeff_grid.addWidget(QtWidgets.QLabel('Швидкість одужання γ'), 1, 0)
         coeff_grid.addWidget(self.gamma_sb, 1, 1)
         coeff_grid.addWidget(QtWidgets.QLabel('Cередній час одужання після інфекції'), 2, 0)
-       #coeff_grid.addWidget(, 2, 1)
+        coeff_grid.addWidget(self.t_recovery, 2, 1)
 
         coeff_grid.addWidget(QtWidgets.QLabel('Передаваність хвороби'), 3, 0)
-   #     coeff_grid.addWidget(self.R0, 3, 1)
+        coeff_grid.addWidget(self.R0, 3, 1)
 
         coeff_gb = QtWidgets.QGroupBox('Коефіцієнти SIR-моделі:')
         coeff_gb.setLayout(coeff_grid)
@@ -148,6 +154,34 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
 
         # Populate the widgets with values
         self.reset_values()
+
+    def onGammaChanged(self):
+        if self.gamma_sb.value() == 0:
+            return
+        newVal = 1/self.gamma_sb.value()
+        new = self.beta_sb.value() / self.gamma_sb.value()
+        if newVal != self.t_recovery.value():
+            self.t_recovery.setValue(newVal)
+            self.R0.setValue(new)
+
+    def onBetaChanged(self):
+        if self.gamma_sb.value() == 0:
+            return
+        newVal = self.beta_sb.value() / self.gamma_sb.value()
+        if newVal != self.gamma_sb.value():
+            self.R0.setValue(newVal)
+
+   # def onR0Changed(self):
+   #     if self.gamma_sb.value() == 0:
+   #         return
+   #     newVal = self.beta_sb.value()/self.gamma_sb.value()
+   #     self.R0.setValue(newVal)
+    def onTrecChanged(self):
+        if self.t_recovery.value() == 0:
+            return
+        newVal = 1 / self.t_recovery.value()
+        if newVal != self.gamma_sb.value():
+            self.gamma_sb.setValue(newVal)
 
     def reset_values(self):
         self.beta_sb.setValue(0.1)
