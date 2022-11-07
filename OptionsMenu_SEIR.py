@@ -4,50 +4,60 @@ import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 
 
-class OptionsMenu_SIR(QtWidgets.QWidget):
+class OptionsMenu_SEIR(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
 
         # Create the "SIR Coefficients" options
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.gamma_sb = QtWidgets.QDoubleSpinBox()
+        self.alpha_sb = QtWidgets.QDoubleSpinBox()
 
+        self.t_incubation = QtWidgets.QDoubleSpinBox()
         self.t_recovery = QtWidgets.QDoubleSpinBox()
         self.R0 = QtWidgets.QDoubleSpinBox()
 
+        self.t_incubation.valueChanged.connect(self.onTIncChanged)
+        self.alpha_sb.valueChanged.connect(self.onAlphaChanged)
         self.gamma_sb.valueChanged.connect(self.onGammaChanged)
         self.t_recovery.valueChanged.connect(self.onTrecChanged)
 
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.beta_sb.valueChanged.connect(self.onBetaChanged)
 
-        for widget in (self.beta_sb, self.gamma_sb):
+        for widget in (self.beta_sb, self.gamma_sb, self.alpha_sb):
             widget.setRange(0, 10)
             widget.setSingleStep(0.01)
 
-        for widget in (self.t_recovery, self.R0):
+        for widget in (self.t_recovery, self.R0, self.t_incubation):
             widget.setRange(0, 100)
             widget.setSingleStep(0.01)
 
         coeff_grid = QtWidgets.QGridLayout()
         coeff_grid.addWidget(QtWidgets.QLabel('Константа швидкості β'), 0, 0)
         coeff_grid.addWidget(self.beta_sb, 0, 1)
-
         coeff_grid.addWidget(QtWidgets.QLabel('Швидкість одужання γ'), 1, 0)
         coeff_grid.addWidget(self.gamma_sb, 1, 1)
         coeff_grid.addWidget(QtWidgets.QLabel('Cередній час одужання після інфекції'), 2, 0)
         coeff_grid.addWidget(self.t_recovery, 2, 1)
-
         coeff_grid.addWidget(QtWidgets.QLabel('Передаваність хвороби'), 3, 0)
         coeff_grid.addWidget(self.R0, 3, 1)
+        coeff_grid.addWidget(QtWidgets.QLabel('Інкубаційний період'), 4, 0)
+        coeff_grid.addWidget(self.t_incubation, 4, 1)
+        coeff_grid.addWidget(QtWidgets.QLabel('Швидкість переходу від інкубаційної стадії до відкритої α'), 5, 0)
+        coeff_grid.addWidget(self.alpha_sb, 5, 1)
 
-        coeff_gb = QtWidgets.QGroupBox('Коефіцієнти SIR-моделі:')
+        coeff_gb = QtWidgets.QGroupBox('Коефіцієнти SEIR-моделі:')
         coeff_gb.setLayout(coeff_grid)
 
         # Create the "Other Parameters" options
         self.sus_sb = QtWidgets.QDoubleSpinBox()
         self.sus_sb.setRange(0, 100000)
         self.sus_sb.setSingleStep(1)
+
+        self.exp_sb = QtWidgets.QDoubleSpinBox()
+        self.exp_sb.setRange(0, 100000)
+        self.exp_sb.setSingleStep(1)
 
         self.inf_sb = QtWidgets.QDoubleSpinBox()
         self.inf_sb.setRange(0, 100000)
@@ -68,15 +78,17 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         other_grid = QtWidgets.QGridLayout()
         other_grid.addWidget(QtWidgets.QLabel('Сприятливі:'), 0, 0)
         other_grid.addWidget(self.sus_sb, 0, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Інфіковані'), 1, 0)
-        other_grid.addWidget(self.inf_sb, 1, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 2, 0)
-        other_grid.addWidget(self.rec_sb, 2, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Із хворобою у інкубаційному періоді:'), 1, 0)
+        other_grid.addWidget(self.exp_sb, 1, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Інфіковані'), 2, 0)
+        other_grid.addWidget(self.inf_sb, 2, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 3, 0)
+        other_grid.addWidget(self.rec_sb, 3, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Ітерації:'), 3, 0)
-        other_grid.addWidget(self.iterations_sb, 3, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Час дельта:'), 4, 0)
-        other_grid.addWidget(self.timedelta_sb, 4, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Ітерації:'), 4, 0)
+        other_grid.addWidget(self.iterations_sb, 4, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Час дельта:'), 5, 0)
+        other_grid.addWidget(self.timedelta_sb, 5, 1)
 
         other_gb = QtWidgets.QGroupBox('Інші параметри:')
         other_gb.setLayout(other_grid)
@@ -159,6 +171,21 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         # Populate the widgets with values
         self.reset_values()
 
+    def onAlphaChanged(self):
+        if self.alpha_sb.value() == 0:
+            return
+        newVal = 1/self.alpha_sb.value()
+        if newVal != self.t_incubation.value():
+            self.t_incubation.setValue(newVal)
+
+    def onTIncChanged(self):
+        if self.t_incubation.value() == 0:
+            return
+
+        newVal = 1/self.t_incubation.value()
+        if newVal != self.alpha_sb.value():
+            self.alpha_sb.setValue(newVal)
+
     def onGammaChanged(self):
         if self.gamma_sb.value() == 0:
             return
@@ -180,6 +207,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
    #         return
    #     newVal = self.beta_sb.value()/self.gamma_sb.value()
    #     self.R0.setValue(newVal)
+
     def onTrecChanged(self):
         if self.t_recovery.value() == 0:
             return
@@ -193,6 +221,8 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         self.sus_sb.setValue(5)
         self.inf_sb.setValue(20)
         self.rec_sb.setValue(5)
+        self.alpha_sb.setValue(0.1)
+        self.exp_sb.setValue(10)
         self.iterations_sb.setValue(1000)
         self.timedelta_sb.setValue(0.02)
 
