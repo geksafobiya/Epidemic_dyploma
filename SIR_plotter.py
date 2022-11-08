@@ -2,9 +2,12 @@
 
 # Python standard library modules
 import sys
+import os
+import pandas as pd
 
 # 3rd party modules
 import matplotlib
+import matplotlib.pyplot as plt
 import matplotlib.backends.backend_qt5agg as backend_qt5agg
 from matplotlib.figure import Figure
 import PyQt5.QtCore as QtCore
@@ -48,6 +51,7 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         self.options_menu.update_btn.clicked.connect(self.calculate_data)
         self.options_menu.update_btn.clicked.connect(self.calculate_coeffs)
 
+        self.options_menu.totalCases_btn.clicked.connect(self.statisticsExcel)
          #elf.options_menu.t_recovery = self.trec
 
         self.options_menu.clear_graph_btn.clicked.connect(self.clear_graph)
@@ -134,6 +138,29 @@ class AppForm_SIR(QtWidgets.QMainWindow):
       #  self.options_menu.superpredators_sb.setValue(self.superpredator_history[-1])
         # перерисовать граф
         self.redraw_graph()
+
+    def statisticsExcel(self):
+
+        self.axes.clear()
+        os.chdir("C:/Users/asja6/Documents/Projects/Epidemic_dyploma/data/")
+        file = "Sweden.xlsx"
+        Ukraine = pd.read_excel(file)
+        days = []
+        new_cases = Ukraine.values[:, 5]
+        days = Ukraine.values[:, 3]
+        days_filtered = []
+        new_cases_filtered = []
+        for i in range(1, len(days)):
+            if "2021" not in days[i] and "2020" not in days[i]:
+                if "-01-" in days[i]:
+                    days_filtered.append(days[i])
+                    new_cases_filtered.append(new_cases[i])
+
+        # print(len(new_cases_filtered), len(days_filtered))
+        plt.figure(figsize=(10, 10))
+        plt.plot(days_filtered, new_cases_filtered)
+        plt.show()
+
 
     def clear_graph(self):
         # очистить историю популяций

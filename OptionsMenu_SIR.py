@@ -126,6 +126,8 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
             QtGui.QIcon(':/resources/calculator.png'),
             'Запуск ітерацій')
 
+        self.totalCases_btn = QtWidgets.QPushButton('Статистика хвороб')
+
        # self.inf_btn = QtWidgets.QPushButton('Інфіковані')
        # self.preyPredator_btn = QtWidgets.QPushButton('Хищники-жертвы')
 
@@ -147,6 +149,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         container.addWidget(other_gb)
         container.addWidget(graph_gb)
         container.addWidget(self.update_btn)
+        container.addWidget(self.totalCases_btn)
       #  container.addStretch()
      #   container.addWidget(self.preySuperpredator_btn)
      #   container.addWidget(self.preyPredator_btn)
