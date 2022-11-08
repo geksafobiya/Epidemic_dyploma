@@ -3,7 +3,6 @@ import PyQt5.QtCore as QtCore
 import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
 
-
 class OptionsMenu_SEIR_mod(QtWidgets.QWidget):
     def __init__(self, parent=None):
         QtWidgets.QWidget.__init__(self, parent)
@@ -12,7 +11,7 @@ class OptionsMenu_SEIR_mod(QtWidgets.QWidget):
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.gamma_sb = QtWidgets.QDoubleSpinBox()
         self.alpha_sb = QtWidgets.QDoubleSpinBox()
-        self.theta_sb = QtWidgets.QDoubleSpinBox();
+        self.theta_sb = QtWidgets.QDoubleSpinBox()
 
         self.t_incubation = QtWidgets.QDoubleSpinBox()
         self.t_recovery = QtWidgets.QDoubleSpinBox()
@@ -28,6 +27,7 @@ class OptionsMenu_SEIR_mod(QtWidgets.QWidget):
 
         for widget in (self.beta_sb, self.gamma_sb, self.alpha_sb, self.theta_sb):
             widget.setRange(0, 10)
+            widget.setDecimals(4)
             widget.setSingleStep(0.01)
 
         for widget in (self.t_recovery, self.R0, self.t_incubation):
