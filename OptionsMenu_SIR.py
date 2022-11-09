@@ -11,15 +11,18 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         # Create the "SIR Coefficients" options
         self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.gamma_sb = QtWidgets.QDoubleSpinBox()
-
         self.t_recovery = QtWidgets.QDoubleSpinBox()
         self.R0 = QtWidgets.QDoubleSpinBox()
 
         self.gamma_sb.valueChanged.connect(self.onGammaChanged)
         self.t_recovery.valueChanged.connect(self.onTrecChanged)
+        self.t_recovery.valueChanged.connect(self.onR0Changed)
+        self.R0.valueChanged.connect(self.onR0Changed)
 
-        self.beta_sb = QtWidgets.QDoubleSpinBox()
         self.beta_sb.valueChanged.connect(self.onBetaChanged)
+
+        self.R0.setEnabled(False)
+        self.t_recovery.setEnabled(False)
 
         for widget in (self.beta_sb, self.gamma_sb):
             widget.setRange(0, 10)
@@ -35,6 +38,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
 
         coeff_grid.addWidget(QtWidgets.QLabel('Швидкість одужання γ'), 1, 0)
         coeff_grid.addWidget(self.gamma_sb, 1, 1)
+
         coeff_grid.addWidget(QtWidgets.QLabel('Cередній час одужання після інфекції'), 2, 0)
         coeff_grid.addWidget(self.t_recovery, 2, 1)
 
@@ -127,6 +131,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
             'Запуск ітерацій')
 
         self.totalCases_btn = QtWidgets.QPushButton('Статистика хвороб')
+        self.onlyInfectious_btn = QtWidgets.QPushButton('onlyInfectious')
 
        # self.inf_btn = QtWidgets.QPushButton('Інфіковані')
        # self.preyPredator_btn = QtWidgets.QPushButton('Хищники-жертвы')
@@ -137,6 +142,8 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         self.clear_graph_btn = QtWidgets.QPushButton(
             QtGui.QIcon(':/resources/chart_line_delete.png'),
             'Очистити графік')
+
+        #self.onlyInfectious_btn.clicked.connect(self.onlyInfectious)
 
         self.reset_values_btn.clicked.connect(self.reset_values)
 
@@ -150,6 +157,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         container.addWidget(graph_gb)
         container.addWidget(self.update_btn)
         container.addWidget(self.totalCases_btn)
+        container.addWidget(self.onlyInfectious_btn)
       #  container.addStretch()
      #   container.addWidget(self.preySuperpredator_btn)
      #   container.addWidget(self.preyPredator_btn)
@@ -165,6 +173,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
     def onGammaChanged(self):
         if self.gamma_sb.value() == 0:
             return
+
         newVal = 1/self.gamma_sb.value()
         new = self.beta_sb.value() / self.gamma_sb.value()
         if newVal != self.t_recovery.value():
@@ -178,11 +187,12 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         if newVal != self.gamma_sb.value():
             self.R0.setValue(newVal)
 
-   # def onR0Changed(self):
-   #     if self.gamma_sb.value() == 0:
-   #         return
-   #     newVal = self.beta_sb.value()/self.gamma_sb.value()
-   #     self.R0.setValue(newVal)
+    def onR0Changed(self):
+        if self.t_recovery.value() == 0:
+            return
+        newVal = self.R0.value() / self.t_recovery.value()
+        self.beta_sb.setValue(newVal)
+
     def onTrecChanged(self):
         if self.t_recovery.value() == 0:
             return

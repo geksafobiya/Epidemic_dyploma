@@ -49,9 +49,14 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         # Подключение сигналов из меню параметров
         self.options_menu.update_btn.clicked.connect(self.clear_graph)
         self.options_menu.update_btn.clicked.connect(self.calculate_data)
-        self.options_menu.update_btn.clicked.connect(self.calculate_coeffs)
+       #self.options_menu.update_btn.clicked.connect(self.calculate_coeffs)
 
+        self.options_menu.totalCases_btn.clicked.connect(self.clear_graph)
         self.options_menu.totalCases_btn.clicked.connect(self.statisticsExcel)
+        self.options_menu.onlyInfectious_btn.clicked.connect(self.clear_graph)
+        self.options_menu.onlyInfectious_btn.clicked.connect(self.calculate_data)
+        self.options_menu.onlyInfectious_btn.clicked.connect(self.onlyInfectious)
+
          #elf.options_menu.t_recovery = self.trec
 
         self.options_menu.clear_graph_btn.clicked.connect(self.clear_graph)
@@ -97,12 +102,6 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         sir_menu = self.menuBar().addMenu('&SIR')
         sir_menu.addAction(sir_action)
 
-    def calculate_coeffs(self):
-        growth = SIRCalculator()
-        growth.gamma = self.options_menu.gamma_sb.value()
-        growth.beta = self.options_menu.beta_sb.value()
-      #  R0 = growth.calculate_r0(growth.beta, growth.gamma)
-      #  trec = growth.calculate_trecovery(growth.gamma)
 
     def calculate_data(self):
         # объект GrowthCalculator
@@ -140,12 +139,10 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         self.redraw_graph()
 
     def statisticsExcel(self):
-
         self.axes.clear()
         os.chdir("C:/Users/asja6/Documents/Projects/Epidemic_dyploma/data/")
         file = "Sweden.xlsx"
         Ukraine = pd.read_excel(file)
-        days = []
         new_cases = Ukraine.values[:, 5]
         days = Ukraine.values[:, 3]
         days_filtered = []
@@ -157,10 +154,19 @@ class AppForm_SIR(QtWidgets.QMainWindow):
                     new_cases_filtered.append(new_cases[i])
 
         # print(len(new_cases_filtered), len(days_filtered))
-        plt.figure(figsize=(10, 10))
+        #plt.axes.set_title('Стастика захворюваності')
+
+        plt.figure(figsize=(15, 15))
         plt.plot(days_filtered, new_cases_filtered)
+        plt.suptitle('Стастика захворюваності', fontsize=20)
         plt.show()
 
+    def onlyInfectious(self):
+        plt.close()
+        plt.figure(figsize=(15, 15))
+        plt.plot(self.infectious_history)
+        plt.suptitle('Стастика захворюваності', fontsize=20)
+        plt.show()
 
     def clear_graph(self):
         # очистить историю популяций
