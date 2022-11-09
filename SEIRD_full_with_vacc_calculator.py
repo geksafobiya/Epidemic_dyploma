@@ -40,41 +40,55 @@ class SEIRDvaccCalculator(object):
         self.dead = 0
 
     def dS_unvac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dS_unvac_dt = self.l - self.mu*Susceptible_unvac - (self.beta_unvac_unvac*Infectious_unvac + self.beta_unvac_vac*Infectious_vac)*Susceptible_unvac/(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
+        dS_unvac_dt = self.l - self.mu*Susceptible_unvac \
+                      - (self.beta_unvac_unvac*Infectious_unvac + self.beta_unvac_vac*Infectious_vac)*Susceptible_unvac\
+                      /(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
         return dS_unvac_dt
 
     def dS_vac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dS_vac_dt = - self.mu*Susceptible_vac - (self.beta_vac_unvac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac/(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
+        dS_vac_dt = - self.mu*Susceptible_vac \
+                    - (self.beta_vac_unvac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac\
+                    /(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
         return dS_vac_dt
 
     def dE_unvac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dE_unvac_dt = (self.beta_unvac_unvac*Infectious_unvac + self.beta_unvac_vac*Infectious_vac)*Susceptible_unvac/(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac) - (self.mu + self.alpha_unvac)*Exposed_unvac
+        dE_unvac_dt = (self.beta_unvac_unvac*Infectious_unvac + self.beta_unvac_vac*Infectious_vac)*Susceptible_unvac\
+                      /(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac) \
+                      - (self.mu + self.alpha_unvac)*Exposed_unvac
         return dE_unvac_dt
 
     def dE_vac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dE_vac_dt = (self.beta_unvac_vac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac/(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac) - (self.mu + self.alpha_vac)*Exposed_vac
+        dE_vac_dt = (self.beta_unvac_vac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac\
+                    /(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac) \
+                    - (self.mu + self.alpha_vac)*Exposed_vac
         return dE_vac_dt
 
     def dI_unvac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dI_unvac_dt = self.alpha_unvac*Exposed_unvac - (self.gamma_unvac+self.mu+self.theta_unvac)*Infectious_unvac
+        dI_unvac_dt = self.alpha_unvac*Exposed_unvac \
+                      - (self.gamma_unvac+self.mu+self.theta_unvac)*Infectious_unvac
         return dI_unvac_dt
 
     def dI_vac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dI_vac_dt = self.alpha_vac*Exposed_vac - (self.gamma_vac+self.mu+self.theta_vac)*Infectious_vac
+        dI_vac_dt = self.alpha_vac*Exposed_vac \
+                    - (self.gamma_vac+self.mu+self.theta_vac)*Infectious_vac
         return dI_vac_dt
 
     def dR_unvac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dR_unvac_dt = self.gamma_unvac*Infectious_unvac - self.mu*Recovered_unvac
+        dR_unvac_dt = self.gamma_unvac*Infectious_unvac \
+                      - self.mu*Recovered_unvac
         # Calculate the predator population change
         return dR_unvac_dt
 
     def dR_vac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dR_vac_dt = self.gamma_vac*Infectious_vac - self.mu*Recovered_vac
+        dR_vac_dt = self.gamma_vac*Infectious_vac \
+                    - self.mu*Recovered_vac
         # Calculate the predator population change
         return dR_vac_dt
 
     def dD(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dD_dt = self.theta_unvac*Infectious_unvac + self.theta_vac*Infectious_vac + self.mu*(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
+        dD_dt = self.theta_unvac*Infectious_unvac \
+                + self.theta_vac*Infectious_vac \
+                + self.mu*(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac)
         # Calculate the predator population change
         return dD_dt
 
@@ -92,21 +106,23 @@ class SEIRDvaccCalculator(object):
         recovered_vac_history = []
         dead_history = []
 
-        y0 = np.array([self.sus_unvac, self.sus_vac, self.exp_unvac, self.exp_vac, self.inf_unvac, self.inf_vac, self.rec_unvac, self.rec_vac, self.dead], dtype='double')
+        y0 = np.array([self.sus_unvac, self.sus_vac, self.exp_unvac, self.exp_vac,
+                       self.inf_unvac, self.inf_vac, self.rec_unvac, self.rec_vac,
+                       self.dead], dtype='double')
         tspan = np.array([0.0, self.days], dtype='double')
 
         try:
             t, y = self.rk4(self.derivatives, tspan, y0, self.days)
 
             susceptible_unvac_history = y[:, 0]
-            susceptible_vac_history = y[1, 0]
-            exposed_unvac_history = y[2, 0]
-            exposed_vac_history = y[3, 0]
-            infectious_unvac_history = y[4, 0]
-            infectious_vac_history = y[5, 0]
-            recovered_unvac_history = y[6, 0]
-            recovered_vac_history = y[7, 0]
-            dead_history = y[8, 0]
+            susceptible_vac_history = y[:, 1]
+            exposed_unvac_history = y[:, 2]
+            exposed_vac_history = y[:, 3]
+            infectious_unvac_history = y[:, 4]
+            infectious_vac_history = y[:, 5]
+            recovered_unvac_history = y[:, 6]
+            recovered_vac_history = y[:, 7]
+            dead_history = y[:, 8]
 
 
             print('t = ', t)
@@ -158,7 +174,8 @@ class SEIRDvaccCalculator(object):
         dD_dt = self.dD(Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac,
                         Infectious_vac, Recovered_unvac, Recovered_vac, Dead)
 
-        drfdt = np.array([dS_unvac_dt, dS_vac_dt, dE_unvac_dt, dE_vac_dt, dI_unvac_dt, dI_vac_dt, dR_unvac_dt, dR_vac_dt, dD_dt], dtype='double')
+        drfdt = np.array([dS_unvac_dt, dS_vac_dt, dE_unvac_dt, dE_vac_dt, dI_unvac_dt,
+                          dI_vac_dt, dR_unvac_dt, dR_vac_dt, dD_dt], dtype='double')
         return drfdt
 
 

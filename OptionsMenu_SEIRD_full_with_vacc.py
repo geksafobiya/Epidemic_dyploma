@@ -81,13 +81,20 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         coeff_grid.addWidget(self.alpha_unvac_sb, 6, 1)
         coeff_grid.addWidget(QtWidgets.QLabel('Швидкість переходу від інкубаційної стадії до відкритої у вакцинованих'), 7, 0)
         coeff_grid.addWidget(self.alpha_vac_sb, 7, 1)
+
         coeff_grid.addWidget(QtWidgets.QLabel('Природня смертність'), 8, 0)
         coeff_grid.addWidget(self.mu_sb, 8, 1)
         coeff_grid.addWidget(QtWidgets.QLabel('Народжуваність'), 9, 0)
         coeff_grid.addWidget(self.l_sb, 9, 1)
 
+        coeff_grid.addWidget(QtWidgets.QLabel('Смертність від вірусу невакцинованих'), 10, 0)
+        coeff_grid.addWidget(self.theta_unvac_sb, 10, 1)
+        coeff_grid.addWidget(QtWidgets.QLabel('Смертність від вірусу вакцинованих'), 11, 0)
+        coeff_grid.addWidget(self.theta_vac_sb, 11, 1)
+
         coeff_gb = QtWidgets.QGroupBox('Коефіцієнти SEIRD-моделі з вакцинацією:')
         coeff_gb.setLayout(coeff_grid)
+
 
         # Create the "Other Parameters" options
         self.sus_unvac_sb = QtWidgets.QDoubleSpinBox()
@@ -160,8 +167,8 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         other_grid.addWidget(QtWidgets.QLabel('Померші:'), 8, 0)
         other_grid.addWidget(self.dead_sb, 8, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Дні:'), 4, 0)
-        other_grid.addWidget(self.days_sb, 4, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Дні:'), 9, 0)
+        other_grid.addWidget(self.days_sb, 9, 1)
         #other_grid.addWidget(QtWidgets.QLabel('Час дельта:'), 5, 0)
         #other_grid.addWidget(self.timedelta_sb, 5, 1)
 

@@ -40,7 +40,10 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         dock.setAllowedAreas(
             QtCore.Qt.LeftDockWidgetArea | QtCore.Qt.RightDockWidgetArea,
         )
-        dock.setWidget(self.options_menu)
+
+        self.scrollArea = QtWidgets.QScrollArea()
+        self.scrollArea.setWidget(self.options_menu)
+        dock.setWidget(self.scrollArea)
         self.addDockWidget(QtCore.Qt.LeftDockWidgetArea, dock)
 
         # Подключение сигналов из меню параметров
@@ -137,7 +140,6 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         results = growth.calculate()
         self.infectious_unvac_history.extend(results['Infectious_unvac'])
         self.infectious_vac_history.extend(results['Infectious_vac'])
-
         self.exposed_unvac_history.extend(results['Exposed_unvac'])
         self.exposed_vac_history.extend(results['Exposed_vac'])
 
@@ -171,15 +173,15 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
 
     def clear_graph(self):
         # очистить историю популяций
-        susceptible_unvac_history = []
-        susceptible_vac_history = []
-        exposed_unvac_history = []
-        exposed_vac_history = []
-        infectious_unvac_history = []
-        infectious_vac_history = []
-        recovered_unvac_history = []
-        recovered_vac_history = []
-        dead_history = []
+        self.susceptible_unvac_history = []
+        self.susceptible_vac_history = []
+        self.exposed_unvac_history = []
+        self.exposed_vac_history = []
+        self.infectious_unvac_history = []
+        self.infectious_vac_history = []
+        self.recovered_unvac_history = []
+        self.recovered_vac_history = []
+        self.dead_history = []
 
         # перерисовать граф
         self.redraw_graph()
@@ -198,18 +200,30 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         if self.susceptible_unvac_history:
             self.axes.plot(self.susceptible_unvac_history, 'b-', label='ще не хворілі невакциновані')
         if self.susceptible_vac_history:
-            self.axes.plot(self.susceptible_vac_history, 'b-', label='ще не хворілі вакциновані')
+            self.axes.plot(self.susceptible_vac_history, 'c-', label='ще не хворілі вакциновані')
 
 
-        if self.exposed_history:
-            self.axes.plot(self.exposed_history, 'y-', label='інкубаційні розсадники')
-        if self.infectious_history:
-            self.axes.plot(self.infectious_history, 'r-', label='хворі на голову')
-        if self.recovered_history:
-            self.axes.plot(self.recovered_history, 'g-', label='очухалися')
+        if self.exposed_unvac_history:
+            self.axes.plot(self.exposed_unvac_history, 'g-', label='інкубаційні невакциновані розсадники')
+        if self.exposed_vac_history:
+            self.axes.plot(self.exposed_vac_history, 'y-', label='інкубаційні вакциновані розсадники')
+
+        if self.infectious_unvac_history:
+            self.axes.plot(self.infectious_unvac_history, 'r-', label='хворі на голову невакциновані')
+        if self.infectious_vac_history:
+            self.axes.plot(self.infectious_vac_history, 'm-', label='хворі на голову вакциновані')
+
+        if self.recovered_unvac_history:
+            self.axes.plot(self.recovered_unvac_history, 'g*', label='очухалися невакциновані')
+        if self.recovered_vac_history:
+            self.axes.plot(self.recovered_vac_history, 'gx', label='очухалися вакциновані')
+        if self.dead_history:
+            self.axes.plot(self.dead_history, 'k', label='померли смертю хоробрих')
+
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
-            if self.recovered_history or self.susceptible_history or self.infectious_history or self.exposed_history:
+            if self.susceptible_unvac_history or self.susceptible_vac_history or self.exposed_unvac_history or self.exposed_vac_history or self.infectious_unvac_history or self.infectious_vac_history or self.recovered_unvac_history or self.recovered_vac_history or self.dead_history:
+
                 legend_loc = str(
                     self.options_menu.legend_loc_cb.currentText()
                 ).lower()
@@ -253,6 +267,6 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     app.setWindowIcon(QtGui.QIcon(':/resources/icon.svg'))
-    form = AppForm_SEIR_vacc()
+    form = AppForm_SEIRD_vacc()
     form.show()
     app.exec_()
