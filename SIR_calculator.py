@@ -10,8 +10,9 @@ class SIRCalculator(object):
         self.beta = 1.0 #константа швидкості
       #  self.Infectious = 10.0
         # Other parameters
-        self.dt = 0.02
-        self.iterations = 1000
+        self.days = 160
+       # self.dt = 0.02
+       # self.iterations = 1000
 
         self.sus = 5
         self.inf = 4
@@ -38,10 +39,10 @@ class SIRCalculator(object):
         recovered_history = []
 
         y0 = np.array([self.sus, self.inf, self.rec], dtype='double')
-        tspan = np.array([0.0, self.dt * self.iterations], dtype='double')
+        tspan = np.array([0.0, self.days], dtype='double')
 
         try:
-            t, y = self.rk4(self.derivatives, tspan, y0, self.iterations)
+            t, y = self.rk4(self.derivatives, tspan, y0, self.days)
             susceptible_history = y[:, 0]
             infectious_history = y[:, 1]
             recovered_history = y[:, 2]

@@ -11,8 +11,8 @@ class SEIRCalculator(object):
         self.alpha = 1.0
       #  self.Infectious = 10.0
         # Other parameters
-        self.dt = 0.02
-        self.iterations = 1000
+        #self.dt = 0.02
+        self.days = 100
         self.exp = 5
         self.sus = 5
         self.inf = 4
@@ -44,10 +44,10 @@ class SEIRCalculator(object):
         recovered_history = []
 
         y0 = np.array([self.sus, self.exp, self.inf, self.rec], dtype='double')
-        tspan = np.array([0.0, self.dt * self.iterations], dtype='double')
+        tspan = np.array([0.0, self.days], dtype='double')
 
         try:
-            t, y = self.rk4(self.derivatives, tspan, y0, self.iterations)
+            t, y = self.rk4(self.derivatives, tspan, y0, self.days)
             susceptible_history = y[:, 0]
             exposed_history = y[:, 1]
             infectious_history = y[:, 2]

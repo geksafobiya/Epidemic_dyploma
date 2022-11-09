@@ -108,8 +108,8 @@ class AppForm_SEIR_mod(QtWidgets.QMainWindow):
         growth.inf = self.options_menu.inf_sb.value()
         growth.rec = self.options_menu.rec_sb.value()
 
-        growth.iterations = self.options_menu.iterations_sb.value()
-        growth.dt = self.options_menu.timedelta_sb.value()
+        growth.days = self.options_menu.days_sb.value()
+        #growth.dt = self.options_menu.timedelta_sb.value()
 
         # Calculate the population growths
         results = growth.calculate()

@@ -27,13 +27,15 @@ class OptionsMenu_SEIR_vacc(QtWidgets.QWidget):
 
         for widget in (self.beta_sb, self.gamma_sb, self.alpha_sb):
             widget.setRange(0, 10)
-            widget.setSingleStep(0.01)
+            widget.setDecimals(4)
+            widget.setSingleStep(0.001)
 
         self.u_sb.setRange(0, 1)
-        self.u_sb.setSingleStep(0.01)
+        self.u_sb.setSingleStep(0.001)
 
         for widget in (self.t_recovery, self.R0, self.t_incubation):
             widget.setRange(0, 100)
+            widget.setDecimals(4)
             widget.setSingleStep(0.01)
 
         coeff_grid = QtWidgets.QGridLayout()
@@ -72,13 +74,13 @@ class OptionsMenu_SEIR_vacc(QtWidgets.QWidget):
         self.rec_sb.setRange(0, 100000)
         self.rec_sb.setSingleStep(1)
 
-        self.iterations_sb = QtWidgets.QSpinBox()
-        self.iterations_sb.setRange(0, 100000)
-        self.iterations_sb.setSingleStep(100)
+        self.days_sb = QtWidgets.QSpinBox()
+        self.days_sb.setRange(0, 100000)
+        self.days_sb.setSingleStep(100)
 
-        self.timedelta_sb = QtWidgets.QDoubleSpinBox()
-        self.timedelta_sb.setRange(0, 100)
-        self.timedelta_sb.setSingleStep(0.05)
+       # self.timedelta_sb = QtWidgets.QDoubleSpinBox()
+       # self.timedelta_sb.setRange(0, 100)
+       # self.timedelta_sb.setSingleStep(0.05)
 
         other_grid = QtWidgets.QGridLayout()
         other_grid.addWidget(QtWidgets.QLabel('Сприятливі:'), 0, 0)
@@ -90,10 +92,10 @@ class OptionsMenu_SEIR_vacc(QtWidgets.QWidget):
         other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 3, 0)
         other_grid.addWidget(self.rec_sb, 3, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Ітерації:'), 4, 0)
-        other_grid.addWidget(self.iterations_sb, 4, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Час дельта:'), 5, 0)
-        other_grid.addWidget(self.timedelta_sb, 5, 1)
+        other_grid.addWidget(QtWidgets.QLabel('Дні:'), 4, 0)
+        other_grid.addWidget(self.days_sb, 4, 1)
+        #other_grid.addWidget(QtWidgets.QLabel('Час дельта:'), 5, 0)
+        #other_grid.addWidget(self.timedelta_sb, 5, 1)
 
         other_gb = QtWidgets.QGroupBox('Інші параметри:')
         other_gb.setLayout(other_grid)
@@ -229,8 +231,8 @@ class OptionsMenu_SEIR_vacc(QtWidgets.QWidget):
         self.rec_sb.setValue(5)
         self.alpha_sb.setValue(0.1)
         self.exp_sb.setValue(10)
-        self.iterations_sb.setValue(1000)
-        self.timedelta_sb.setValue(0.02)
+        self.days_sb.setValue(100)
+       # self.timedelta_sb.setValue(0.02)
 
     def legend_change(self):
         self.legend_loc_cb.setEnabled(self.legend_cb.isChecked())
