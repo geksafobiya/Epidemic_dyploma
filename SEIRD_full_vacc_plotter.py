@@ -10,7 +10,12 @@ from matplotlib.figure import Figure
 import PyQt5.QtCore as QtCore
 import PyQt5.QtGui as QtGui
 import PyQt5.QtWidgets as QtWidgets
-
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtGui import QPixmap
+#from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QHBoxLayout
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QWidget
 # Local application modules
 from SEIRD_full_with_vacc_calculator import SEIRDvaccCalculator
 from OptionsMenu_SEIRD_full_with_vacc import OptionsMenu_SEIRD_full_with_vacc
@@ -79,7 +84,7 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
 
         sir_action = QtWidgets.QAction('&SEIRD vaccined', self)
         sir_action.setToolTip('SEIRD vaccined')
-        sir_action.triggered.connect(self.show_seir)
+        sir_action.triggered.connect(self.show_seird)
 
      # создать менюбар
         file_exit_action = QtWidgets.QAction('&Exit', self)
@@ -198,31 +203,32 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         # Plot the current population data
 
         if self.susceptible_unvac_history:
-            self.axes.plot(self.susceptible_unvac_history, 'b-', label='ще не хворілі невакциновані')
+            self.axes.plot(self.susceptible_unvac_history, 'firebrick', label='ще не хворілі невакциновані')
         if self.susceptible_vac_history:
-            self.axes.plot(self.susceptible_vac_history, 'c-', label='ще не хворілі вакциновані')
-
+            self.axes.plot(self.susceptible_vac_history, 'red', label='ще не хворілі вакциновані')
 
         if self.exposed_unvac_history:
-            self.axes.plot(self.exposed_unvac_history, 'g-', label='інкубаційні невакциновані розсадники')
+            self.axes.plot(self.exposed_unvac_history, 'gold', label='інкубаційні невакциновані розсадники')
         if self.exposed_vac_history:
-            self.axes.plot(self.exposed_vac_history, 'y-', label='інкубаційні вакциновані розсадники')
+            self.axes.plot(self.exposed_vac_history, 'lemonchiffon', label='інкубаційні вакциновані розсадники')
 
         if self.infectious_unvac_history:
-            self.axes.plot(self.infectious_unvac_history, 'r-', label='хворі на голову невакциновані')
+            self.axes.plot(self.infectious_unvac_history, 'royalblue', label='хворі невакциновані')
         if self.infectious_vac_history:
-            self.axes.plot(self.infectious_vac_history, 'm-', label='хворі на голову вакциновані')
+            self.axes.plot(self.infectious_vac_history, 'navy', label='хворі вакциновані')
 
         if self.recovered_unvac_history:
-            self.axes.plot(self.recovered_unvac_history, 'g*', label='очухалися невакциновані')
+            self.axes.plot(self.recovered_unvac_history, 'green', label='очухалися невакциновані')
         if self.recovered_vac_history:
-            self.axes.plot(self.recovered_vac_history, 'gx', label='очухалися вакциновані')
+            self.axes.plot(self.recovered_vac_history, 'lime', label='очухалися вакциновані')
         if self.dead_history:
-            self.axes.plot(self.dead_history, 'k', label='померли смертю хоробрих')
+            self.axes.plot(self.dead_history, 'black', label='померли смертю хоробрих')
 
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
-            if self.susceptible_unvac_history or self.susceptible_vac_history or self.exposed_unvac_history or self.exposed_vac_history or self.infectious_unvac_history or self.infectious_vac_history or self.recovered_unvac_history or self.recovered_vac_history or self.dead_history:
+            if self.susceptible_unvac_history or self.susceptible_vac_history or self.exposed_unvac_history or \
+                    self.exposed_vac_history or self.infectious_unvac_history or self.infectious_vac_history or \
+                    self.recovered_unvac_history or self.recovered_vac_history or self.dead_history:
 
                 legend_loc = str(
                     self.options_menu.legend_loc_cb.currentText()
@@ -236,13 +242,32 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         # рисуем график
         self.canvas.draw()
 
-    def show_seir(self):
+    def show_seird(self):
 
-        message = '''<font size="+2">SEIR-модель з вакцинацією</font>
-            <p>dS/dt = -βSI/N 
-            <p>dE/dt = (1-u)βSI/N - αE
-            <p>dI/dt = αE - ɣI
-            <p>dR/dt = ɣI
+        message = '''<font size="+2">SEIRD-модель з вакцинацією</font>
+            <p>dS<font size="-5">unvac</font>/dt = l - μ*S<font size="-5">unvac</font> - S<font size="-5">unvac</font>(β<font size="-5">unvac->unvac</font>*I<font size="-5">unvac</font> 
+            + β<font size="-5">unvac->vac</font>*I<font size="-5">vac</font>)/N 
+            <p>dS<font size="-5">vac</font>/dt = - μ*S<font size="-5">vac</font> - S<font size="-5">vac</font>
+            (β<font size="-5">vac->unvac</font>*I<font size="-5">vac</font> 
+            + β<font size="-5">vac->vac</font>*I<font size="-5">vac</font>)/N 
+            
+            <p>dE<font size="-5">unvac</font>/dt = S<font size="-5">unvac</font>(β<font size="-5">unvac->unvac</font>*I<font size="-5">unvac</font> 
+            + β<font size="-5">unvac->vac</font>*I<font size="-5">vac</font>)/N - (μ+α<font size="-5">unvac</font>)E<font size="-5">unvac</font>
+            <p>dE<font size="-5">vac</font>/dt = S<font size="-5">vac</font>(β<font size="-5">unvac->vac</font>*I<font size="-5">vac</font> 
+            + β<font size="-5">vac->vac</font>*I<font size="-5">vac</font>)/N - (μ+α<font size="-5">vac</font>)E<font size="-5">vac</font>
+
+            <p>dI<font size="-5">unvac</font>/dt = α<font size="-5">unvac</font>E<font size="-5">unvac</font> - (ɣ<font size="-5">unvac</font> + μ + θ<font size="-5">unvac</font>)I<font size="-5">unvac</font>
+            <p>dI<font size="-5">vac</font>/dt = α<font size="-5">vac</font>E<font size="-5">vac</font> - (ɣ<font size="-5">vac</font> + μ + θ<font size="-5">vac</font>)I<font size="-5">vac</font>
+           
+            <p>dR<font size="-5">unvac</font>/dt = ɣ<font size="-5">unvac</font>I<font size="-5">unvac</font> - μR<font size="-5">unvac</font>
+            <p>dR<font size="-5">vac</font>/dt = ɣ<font size="-5">vac</font>I<font size="-5">vac</font> - μR<font size="-5">vac</font>
+            
+            <p>dD/dt = θ<font size="-5">unvac</font>I<font size="-5">unvac</font> + θ<font size="-5">vac</font>I<font size="-5">vac</font> + 
+            μ(S<font size="-5">unvac</font> + S<font size="-5">vac</font> + E<font size="-5">unvac</font> + E<font size="-5">vac</font> +
+            I<font size="-5">unvac</font> + I<font size="-5">vac</font> + I<font size="-5">unvac</font> + I<font size="-5">vac</font> +
+            R<font size="-5">unvac</font> + R<font size="-5">vac</font>)
+            
+          
             <p>де
             <p>S — кількість сприятливих до вірусу;
             <p>Е — кількість населення із хворобою у інкубаційному періоді;
@@ -253,7 +278,7 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
             <p>α — швидкість переходу хвороби від інкубаційної стадії до відкритої;
             <p>ɣ — швидкість одужання.
             '''
-        QtWidgets.QMessageBox.about(self, 'SЕIR vaccined' + '', message)
+        QtWidgets.QMessageBox.about(self, 'SЕIRD vaccined', message)
 
     def show_about(self):
 

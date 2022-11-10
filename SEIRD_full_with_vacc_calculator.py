@@ -58,7 +58,7 @@ class SEIRDvaccCalculator(object):
         return dE_unvac_dt
 
     def dE_vac(self, Susceptible_unvac, Susceptible_vac, Exposed_unvac, Exposed_vac, Infectious_unvac, Infectious_vac, Recovered_unvac, Recovered_vac, Dead):
-        dE_vac_dt = (self.beta_unvac_vac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac\
+        dE_vac_dt = (self.beta_vac_unvac*Infectious_unvac + self.beta_vac_vac*Infectious_vac)*Susceptible_vac\
                     /(Susceptible_unvac+Susceptible_vac+Exposed_unvac+Exposed_vac+Infectious_unvac+Infectious_vac+Recovered_unvac+Recovered_vac) \
                     - (self.mu + self.alpha_vac)*Exposed_vac
         return dE_vac_dt

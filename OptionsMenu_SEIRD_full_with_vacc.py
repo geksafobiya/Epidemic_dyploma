@@ -41,13 +41,13 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         for widget in (self.beta_unvac_unvac_sb, self.beta_unvac_vac_sb, self.beta_vac_unvac_sb, self.beta_vac_vac_sb,
                        self.gamma_unvac_sb, self.gamma_vac_sb, self.alpha_unvac_sb, self.alpha_vac_sb, self.mu_sb, self.l_sb,
                        self.theta_unvac_sb, self.theta_vac_sb):
-            widget.setRange(0, 10)
-            widget.setDecimals(4)
+            widget.setRange(0, 2)
+            widget.setDecimals(10)
             widget.setSingleStep(0.001)
 
         for widget in (self.t_recovery, self.R0, self.t_incubation):
             widget.setRange(0, 100)
-            widget.setDecimals(4)
+            widget.setDecimals(10)
             widget.setSingleStep(0.01)
 
         coeff_grid = QtWidgets.QGridLayout()
@@ -142,23 +142,23 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
        # self.timedelta_sb.setSingleStep(0.05)
 
         other_grid = QtWidgets.QGridLayout()
-        other_grid.addWidget(QtWidgets.QLabel('Сприятливі невакциновані йолопи:'), 0, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Сприятливі невакциновані:'), 0, 0)
         other_grid.addWidget(self.sus_unvac_sb, 0, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Сприятливі вакциновані крихітки:'), 1, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Сприятливі вакциновані:'), 1, 0)
         other_grid.addWidget(self.sus_vac_sb, 1, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Із хворобою у інкубаційному періоді невакциновані експериментатори:'), 2, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Із хворобою у інкубаційному періоді невакциновані:'), 2, 0)
         other_grid.addWidget(self.exp_unvac_sb, 2, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Із хворобою у інкубаційному періоді вакциновані невдахи:'), 3, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Із хворобою у інкубаційному періоді вакциновані:'), 3, 0)
         other_grid.addWidget(self.exp_vac_sb, 3, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Інфіковані невакциновані (не фортануло пацанам):'), 4, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Інфіковані невакциновані:'), 4, 0)
         other_grid.addWidget(self.inf_unvac_sb, 4, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Інфіковані вакциновані:'), 5, 0)
         other_grid.addWidget(self.inf_vac_sb, 5, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані невакциновані виживші:'), 6, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Oчухані невакциновані:'), 6, 0)
         other_grid.addWidget(self.rec_unvac_sb, 6, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Oчухані вакциновані:'), 7, 0)
@@ -229,9 +229,9 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         self.clear_graph_btn = QtWidgets.QPushButton(
             QtGui.QIcon(':/resources/chart_line_delete.png'),
             'Очистити графік')
-
+        self.ukrainian_values_btn = QtWidgets.QPushButton('Коефіцієнти для України')
         self.reset_values_btn.clicked.connect(self.reset_values)
-
+        self.ukrainian_values_btn.clicked.connect(self.ukrainian_values)
      #   self.preySuperpredator_btn.clicked.connect(self.preySuperpredator)
       #  self.preyPredator_btn.clicked.connect(self.preyPredator)
 
@@ -245,6 +245,7 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
      #   container.addWidget(self.preySuperpredator_btn)
      #   container.addWidget(self.preyPredator_btn)
      #
+        container.addWidget(self.ukrainian_values_btn)
         container.addWidget(self.reset_values_btn)
         container.addWidget(self.clear_graph_btn)
         container.addStretch()
@@ -296,6 +297,33 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
 #        newVal = 1 / self.t_recovery.value()
 #        if newVal != self.gamma_sb.value():
 #            self.gamma_sb.setValue(newVal)
+    def ukrainian_values(self):
+        self.beta_unvac_unvac_sb.setValue(0.01)
+        self.beta_unvac_vac_sb.setValue(0.01)
+        self.beta_vac_unvac_sb.setValue(0.01)
+        self.beta_vac_vac_sb.setValue(0.01)
+
+        self.mu_sb.setValue(0.0000418105)
+        self.l_sb.setValue(0.0000181008)
+
+        self.gamma_unvac_sb.setValue(0.14)
+        self.gamma_vac_sb.setValue(0.10)
+
+        self.sus_unvac_sb.setValue(36.851)
+        self.sus_vac_sb.setValue(62.949)
+
+        self.inf_unvac_sb.setValue(1)
+        self.inf_vac_sb.setValue(1)
+
+        self.rec_unvac_sb.setValue(0)
+        self.rec_vac_sb.setValue(0)
+
+        self.alpha_unvac_sb.setValue(0.01)
+        self.alpha_vac_sb.setValue(0.01)
+
+        self.theta_vac_sb.setValue(0.000001)
+        self.theta_unvac_sb.setValue(0.0000047244)
+        self.days_sb.setValue(100)
 
     def reset_values(self):
         self.beta_unvac_unvac_sb.setValue(0.1)
