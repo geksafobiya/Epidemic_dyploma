@@ -51,11 +51,11 @@ class AppForm_SIR(QtWidgets.QMainWindow):
         self.options_menu.update_btn.clicked.connect(self.calculate_data)
        #self.options_menu.update_btn.clicked.connect(self.calculate_coeffs)
 
-        self.options_menu.totalCases_btn.clicked.connect(self.clear_graph)
-        self.options_menu.totalCases_btn.clicked.connect(self.statisticsExcel)
-        self.options_menu.onlyInfectious_btn.clicked.connect(self.clear_graph)
-        self.options_menu.onlyInfectious_btn.clicked.connect(self.calculate_data)
-        self.options_menu.onlyInfectious_btn.clicked.connect(self.onlyInfectious)
+     #   self.options_menu.totalCases_btn.clicked.connect(self.clear_graph)
+     #   self.options_menu.totalCases_btn.clicked.connect(self.statisticsExcel)
+     #   self.options_menu.onlyInfectious_btn.clicked.connect(self.clear_graph)
+     #   self.options_menu.onlyInfectious_btn.clicked.connect(self.calculate_data)
+     #   self.options_menu.onlyInfectious_btn.clicked.connect(self.onlyInfectious)
 
          #elf.options_menu.t_recovery = self.trec
 
@@ -183,17 +183,17 @@ class AppForm_SIR(QtWidgets.QMainWindow):
 
         # Create the graph labels
         self.axes.set_title('SIR-model: Susceptible, Infectious, Recovered')
-        self.axes.set_xlabel('Ітерації')
+        self.axes.set_xlabel('Дні')
         self.axes.set_ylabel('Кількість населення')
 
         # Plot the current population data
 
         if self.susceptible_history:
-            self.axes.plot(self.susceptible_history, 'b-', label='скоро здохнуть')
+            self.axes.plot(self.susceptible_history, 'b-', label='ще не переболівші')
         if self.infectious_history:
-            self.axes.plot(self.infectious_history, 'r-', label='хворі на голову')
+            self.axes.plot(self.infectious_history, 'r-', label='хворі')
         if self.recovered_history:
-            self.axes.plot(self.recovered_history, 'g-', label='очухалися')
+            self.axes.plot(self.recovered_history, 'g-', label='перехворіли та мають імунітет')
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
             if self.recovered_history or self.susceptible_history or self.infectious_history:

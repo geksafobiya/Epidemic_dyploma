@@ -50,6 +50,8 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
             widget.setDecimals(10)
             widget.setSingleStep(0.01)
 
+
+
         coeff_grid = QtWidgets.QGridLayout()
         coeff_grid.addWidget(QtWidgets.QLabel('Швидкість передачі захворювання від невакцинованих до невакцинованих'), 0, 0)
         coeff_grid.addWidget(self.beta_unvac_unvac_sb, 0, 1)
@@ -98,35 +100,35 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
 
         # Create the "Other Parameters" options
         self.sus_unvac_sb = QtWidgets.QDoubleSpinBox()
-        self.sus_unvac_sb.setRange(0, 100000)
+        self.sus_unvac_sb.setRange(0, 10000000)
         self.sus_unvac_sb.setSingleStep(1)
 
         self.sus_vac_sb = QtWidgets.QDoubleSpinBox()
-        self.sus_vac_sb.setRange(0, 100000)
+        self.sus_vac_sb.setRange(0, 10000000)
         self.sus_vac_sb.setSingleStep(1)
 
         self.exp_unvac_sb = QtWidgets.QDoubleSpinBox()
-        self.exp_unvac_sb.setRange(0, 100000)
+        self.exp_unvac_sb.setRange(0, 10000000)
         self.exp_unvac_sb.setSingleStep(1)
 
         self.exp_vac_sb = QtWidgets.QDoubleSpinBox()
-        self.exp_vac_sb.setRange(0, 100000)
+        self.exp_vac_sb.setRange(0, 10000000)
         self.exp_vac_sb.setSingleStep(1)
 
         self.inf_unvac_sb = QtWidgets.QDoubleSpinBox()
-        self.inf_unvac_sb.setRange(0, 100000)
+        self.inf_unvac_sb.setRange(0, 10000000)
         self.inf_unvac_sb.setSingleStep(1)
 
         self.inf_vac_sb = QtWidgets.QDoubleSpinBox()
-        self.inf_vac_sb.setRange(0, 100000)
+        self.inf_vac_sb.setRange(0, 10000000)
         self.inf_vac_sb.setSingleStep(1)
 
         self.rec_unvac_sb = QtWidgets.QDoubleSpinBox()
-        self.rec_unvac_sb.setRange(0, 100000)
+        self.rec_unvac_sb.setRange(0, 10000000)
         self.rec_unvac_sb.setSingleStep(1)
 
         self.rec_vac_sb = QtWidgets.QDoubleSpinBox()
-        self.rec_vac_sb.setRange(0, 100000)
+        self.rec_vac_sb.setRange(0, 10000000)
         self.rec_vac_sb.setSingleStep(1)
 
         self.dead_sb = QtWidgets.QDoubleSpinBox()
@@ -158,10 +160,10 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         other_grid.addWidget(QtWidgets.QLabel('Інфіковані вакциновані:'), 5, 0)
         other_grid.addWidget(self.inf_vac_sb, 5, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані невакциновані:'), 6, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Одужавші невакциновані:'), 6, 0)
         other_grid.addWidget(self.rec_unvac_sb, 6, 1)
 
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані вакциновані:'), 7, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Одужавші вакциновані:'), 7, 0)
         other_grid.addWidget(self.rec_vac_sb, 7, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Померші:'), 8, 0)
@@ -298,19 +300,19 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
 #        if newVal != self.gamma_sb.value():
 #            self.gamma_sb.setValue(newVal)
     def ukrainian_values(self):
-        self.beta_unvac_unvac_sb.setValue(0.01)
-        self.beta_unvac_vac_sb.setValue(0.01)
-        self.beta_vac_unvac_sb.setValue(0.01)
-        self.beta_vac_vac_sb.setValue(0.01)
+        self.beta_unvac_unvac_sb.setValue(0.4)
+        self.beta_unvac_vac_sb.setValue(0.04)
+        self.beta_vac_unvac_sb.setValue(0.2)
+        self.beta_vac_vac_sb.setValue(0.02)
 
         self.mu_sb.setValue(0.0000418105)
         self.l_sb.setValue(0.0000181008)
 
-        self.gamma_unvac_sb.setValue(0.14)
-        self.gamma_vac_sb.setValue(0.10)
+        self.gamma_unvac_sb.setValue(0.0714)
+        self.gamma_vac_sb.setValue(0.125)
 
-        self.sus_unvac_sb.setValue(36.851)
-        self.sus_vac_sb.setValue(62.949)
+        self.sus_unvac_sb.setValue(62.949)
+        self.sus_vac_sb.setValue(36.851)
 
         self.inf_unvac_sb.setValue(1)
         self.inf_vac_sb.setValue(1)
@@ -318,11 +320,11 @@ class OptionsMenu_SEIRD_full_with_vacc(QtWidgets.QWidget):
         self.rec_unvac_sb.setValue(0)
         self.rec_vac_sb.setValue(0)
 
-        self.alpha_unvac_sb.setValue(0.01)
-        self.alpha_vac_sb.setValue(0.01)
+        self.alpha_unvac_sb.setValue(0.17858)
+        self.alpha_vac_sb.setValue(0.17858)
 
-        self.theta_vac_sb.setValue(0.000001)
-        self.theta_unvac_sb.setValue(0.0000047244)
+        self.theta_vac_sb.setValue(0.0000052474)
+        self.theta_unvac_sb.setValue(0.0000052474)
         self.days_sb.setValue(100)
 
     def reset_values(self):

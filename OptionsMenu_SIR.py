@@ -76,7 +76,7 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         other_grid.addWidget(self.sus_sb, 0, 1)
         other_grid.addWidget(QtWidgets.QLabel('Інфіковані'), 1, 0)
         other_grid.addWidget(self.inf_sb, 1, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 2, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Одужавші:'), 2, 0)
         other_grid.addWidget(self.rec_sb, 2, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Дні:'), 3, 0)
@@ -132,8 +132,8 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
             QtGui.QIcon(':/resources/calculator.png'),
             'Запуск ітерацій')
 
-        self.totalCases_btn = QtWidgets.QPushButton('Статистика хвороб')
-        self.onlyInfectious_btn = QtWidgets.QPushButton('onlyInfectious')
+       # self.totalCases_btn = QtWidgets.QPushButton('Статистика хвороб')
+        #self.onlyInfectious_btn = QtWidgets.QPushButton('onlyInfectious')
 
        # self.inf_btn = QtWidgets.QPushButton('Інфіковані')
        # self.preyPredator_btn = QtWidgets.QPushButton('Хищники-жертвы')
@@ -158,8 +158,8 @@ class OptionsMenu_SIR(QtWidgets.QWidget):
         container.addWidget(other_gb)
         container.addWidget(graph_gb)
         container.addWidget(self.update_btn)
-        container.addWidget(self.totalCases_btn)
-        container.addWidget(self.onlyInfectious_btn)
+#        container.addWidget(self.totalCases_btn)
+ #       container.addWidget(self.onlyInfectious_btn)
       #  container.addStretch()
      #   container.addWidget(self.preySuperpredator_btn)
      #   container.addWidget(self.preyPredator_btn)

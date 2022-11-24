@@ -157,11 +157,11 @@ class AppForm_SEIR_vacc(QtWidgets.QMainWindow):
         if self.susceptible_history:
             self.axes.plot(self.susceptible_history, 'b-', label='ще не хворіли')
         if self.exposed_history:
-            self.axes.plot(self.exposed_history, 'y-', label='інкубаційні розсадники')
+            self.axes.plot(self.exposed_history, 'y-', label='інкубаційні')
         if self.infectious_history:
-            self.axes.plot(self.infectious_history, 'r-', label='хворі на голову')
+            self.axes.plot(self.infectious_history, 'r-', label='хворі')
         if self.recovered_history:
-            self.axes.plot(self.recovered_history, 'g-', label='очухалися')
+            self.axes.plot(self.recovered_history, 'g-', label='перехворілі')
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
             if self.recovered_history or self.susceptible_history or self.infectious_history or self.exposed_history:

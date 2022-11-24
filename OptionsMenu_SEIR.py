@@ -84,7 +84,7 @@ class OptionsMenu_SEIR(QtWidgets.QWidget):
         other_grid.addWidget(self.exp_sb, 1, 1)
         other_grid.addWidget(QtWidgets.QLabel('Інфіковані'), 2, 0)
         other_grid.addWidget(self.inf_sb, 2, 1)
-        other_grid.addWidget(QtWidgets.QLabel('Oчухані:'), 3, 0)
+        other_grid.addWidget(QtWidgets.QLabel('Перехворівші:'), 3, 0)
         other_grid.addWidget(self.rec_sb, 3, 1)
 
         other_grid.addWidget(QtWidgets.QLabel('Дні:'), 4, 0)

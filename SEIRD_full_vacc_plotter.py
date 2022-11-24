@@ -196,8 +196,8 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
         self.axes.clear()
 
         # Create the graph labels
-        self.axes.set_title('SEIR-model with vaccines: Susceptible, Exposed, Infectious, Recovered')
-        self.axes.set_xlabel('Ітерації')
+        self.axes.set_title('SEIRD-model with vaccine: Susceptible, Exposed, Infectious, Recovered, Dead')
+        self.axes.set_xlabel('Дні')
         self.axes.set_ylabel('Кількість населення')
 
         # Plot the current population data
@@ -208,9 +208,9 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
             self.axes.plot(self.susceptible_vac_history, 'red', label='ще не хворілі вакциновані')
 
         if self.exposed_unvac_history:
-            self.axes.plot(self.exposed_unvac_history, 'gold', label='інкубаційні невакциновані розсадники')
+            self.axes.plot(self.exposed_unvac_history, 'gold', label='невакциновані із вірусом в інкубаційній формі')
         if self.exposed_vac_history:
-            self.axes.plot(self.exposed_vac_history, 'lemonchiffon', label='інкубаційні вакциновані розсадники')
+            self.axes.plot(self.exposed_vac_history, 'lemonchiffon', label='вакциновані із вірусом в інкубаційній формі')
 
         if self.infectious_unvac_history:
             self.axes.plot(self.infectious_unvac_history, 'royalblue', label='хворі невакциновані')
@@ -218,11 +218,11 @@ class AppForm_SEIRD_vacc(QtWidgets.QMainWindow):
             self.axes.plot(self.infectious_vac_history, 'navy', label='хворі вакциновані')
 
         if self.recovered_unvac_history:
-            self.axes.plot(self.recovered_unvac_history, 'green', label='очухалися невакциновані')
+            self.axes.plot(self.recovered_unvac_history, 'green', label='перехворівші невакциновані')
         if self.recovered_vac_history:
-            self.axes.plot(self.recovered_vac_history, 'lime', label='очухалися вакциновані')
+            self.axes.plot(self.recovered_vac_history, 'lime', label='перехворівші вакциновані')
         if self.dead_history:
-            self.axes.plot(self.dead_history, 'black', label='померли смертю хоробрих')
+            self.axes.plot(self.dead_history, 'black', label='померли')
 
         # если нужно, создаём легенду
         if self.options_menu.legend_cb.isChecked():
